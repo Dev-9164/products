@@ -1,0 +1,73 @@
+<p-toast></p-toast>
+
+<main *ngIf="!isChartViewActive()" class="container full__width" style="height: 98%;">
+    <div class="table__container full__width" style="height: 91.5%;">
+        <p-table *ngIf="!loaders.isFetchingProducts" [value]="tempTableData()" styleClass="p-datatable-striped"
+            selectionMode="single" [style]="getStyles(enum.TABLE)">
+            <ng-container>
+                <ng-template pTemplate="caption">
+                    <div class="full__width flex align-items-center justify-content-between">
+                        <div class="table__caption">Products</div>
+                        <p-button [loading]="loaders.isFetchingProducts" loadingIcon="pi pi-spin pi-sync"
+                            [style]="getStyles(enum.REFRESH_BTN)" (onClick)="refreshProducts(true)" size="large"
+                            icon="pi pi-refresh">
+                        </p-button>
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th class="table__heading" *ngFor="let heading of tableHeadings;">{{heading | titlecase}}</th>
+                    </tr>
+                </ng-template>
+
+                <ng-template pTemplate="body" let-product>
+                    <tr class="table__row" style="height: 3.25rem;">
+                        <td class="table__data">{{product.id}}</td>
+                        <td class="table__data">{{product.title | titlecase}}</td>
+                        <td class="table__data">{{product.category | titlecase}}</td>
+                        <td class="table__data">{{product.price | currency: 'INR'}}</td>
+                        <td class="table__data">
+                            <div style="display: flex;"
+                                class="flex-row justify-content-around align-items-center full__height full__width gap-5">
+                                <i class="pi pi-pencil" pTooltip="Edit" tooltipPosition="bottom"
+                                    (click)="edit(product)"></i>
+                                <i pTooltip="Delete" tooltipPosition="bottom"
+                                    [class]="loaders.isProductDeletionInProgress && selectedProductId === product.id ? 'pi pi-spin pi-sync' : 'pi pi-trash' "
+                                    (click)="remove(product)"></i>
+                            </div>
+                        </td>
+                    </tr>
+                </ng-template>
+            </ng-container>
+        </p-table>
+        <div class="full__width full__height flex justify-content-center align-items-center gap-4"
+            *ngIf="loaders.isFetchingProducts">
+            <p-progressSpinner styleClass="w-4rem h-4rem" animationDuration="0.75s"></p-progressSpinner>
+            <div class="loading">Loading...</div>
+        </div>
+    </div>
+
+    <div class="full__width paginator__container">
+        <div class="chart-cta" (click)="openChartView()">
+            <div class="full__width full__height">
+                <i class="pi pi-eye full__height full__width">{{'view chart' | titlecase}}</i>
+            </div>
+        </div>
+        <p-paginator [style]="getStyles(enum.PAGINATOR)" (onPageChange)="onPageChange($event)"
+            [first]="paginationConfig.first" [rows]="paginationConfig.row" [totalRecords]="tableData.length"
+            [rowsPerPageOptions]="[10, 20, 30]">
+        </p-paginator>
+    </div>
+</main>
+
+<section *ngIf="isChartViewActive()" class="full__height full__width chart__container dark">
+    <div class="full__width" style="padding: 2rem;">
+        <i class="pi pi-arrow-left pointer" (click)="isChartViewActive.set(false)"></i>
+    </div>
+    <ngx-charts-bar-vertical [view]="view" [results]="chartData" [customColors]="colorScheme" [gradient]="gradient"
+        [xAxis]="showXAxis" [yAxis]="showYAxis" [legend]="showLegend" [showXAxisLabel]="showXAxisLabel"
+        [showYAxisLabel]="showYAxisLabel" [xAxisLabel]="xAxisLabel" [yAxisLabel]="yAxisLabel"
+        (select)="onSelect($event)">
+    </ngx-charts-bar-vertical>
+
+</section>

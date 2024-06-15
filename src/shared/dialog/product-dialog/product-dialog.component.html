@@ -1,0 +1,32 @@
+<div class="dialog__container full__height full__width">
+    <form [formGroup]="productFormGroup" class="full__width full__height form__container ">
+        <div class="full__width">
+            <span class="p-float-label full__width">
+                <label htmlFor="productName">{{'Name*'}}</label>
+                <input style="padding-left: 1rem;" class="full__width p-inputtext-lg" pInputText id="productName"
+                    formControlName="productName" oninput="this.value = this.value.replace(/[^\sa-zA-Z]/g,'')" />
+                <span *ngIf="productFormGroup.get('productName')?.invalid && productFormGroup.get('productName')?.dirty"
+                    [style]="{'color':'red','padding':'0.15rem 0','font-size':'1.2rem'}">Please enter product
+                    name</span>
+            </span>
+
+            <span class="p-float-label full__width">
+                <label htmlFor="productPrice">{{'Price*'}}</label>
+                <input style="padding-left: 1rem;" oninput="this.value = this.value.replace(/[^\s0-9.]/g,'')"
+                    class="full__width p-inputtext-lg" pInputText id="productPrice" formControlName="productPrice" />
+                <span
+                    *ngIf="productFormGroup.get('productPrice')?.invalid && productFormGroup.get('productPrice')?.dirty"
+                    [style]="{'color':'red','padding':'0.15rem 0','font-size':'1.2rem'}">Please enter product
+                    price</span>
+            </span>
+        </div>
+
+        <p-button [disabled]="productFormGroup.invalid" loadingIcon="pi pi-spin pi-sync" [loading]="isLoading"
+            [style]="getLoadingBtnStyle(enum.LOADING_BTN)" [label]="(isLoading ? 'Saving...' : 'Submit')"
+            (onClick)="submitForm()">
+        </p-button>
+
+
+    </form>
+
+</div>

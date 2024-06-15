@@ -1,0 +1,40 @@
+.dialog{
+    &__container{
+        font-size: 1.6rem;
+        
+        & form.form{
+            &__container{
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+                align-items: flex-end;
+                gap: 1.6rem;
+
+                &>div{
+                   display: flex;
+                   flex-direction: column;
+                   justify-content: flex-start;
+                   align-items: flex-start;
+                   gap: 1.6rem; 
+                }
+
+                & span.p-float-label{
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: flex-start;
+                    align-items: flex-start;
+                    gap: 0.8rem;
+
+                    & > input{
+                        font-size: 1.6rem;
+                    }
+                }
+            }
+        }
+    }
+
+    .pointer{
+        cursor: pointer;
+    }
+
+}
